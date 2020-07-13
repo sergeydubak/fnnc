@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["FNNC_SECRET_KEY"]
+SECRET_KEY = os.environ.get('SECRET_KEY', default='42')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default='localhost 127.0.0.1 [::1]').split(' ')
 
 
 # Application definition
@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'fnnc.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.environ.get('DATABASE_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DATABASE_NAME', default=os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': os.environ.get('DATABASE_USER', default='user'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', default='password'),
+        'HOST': os.environ.get('DATABASE_HOST', default='localhost'),
+        'PORT': os.environ.get('DATABASE_PORT', default='5432'),
     }
 }
 
